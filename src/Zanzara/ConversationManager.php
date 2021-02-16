@@ -46,10 +46,7 @@ class ConversationManager
     {
         $key = 'state';
         $cacheKey = $this->getConversationKey($chatId);
-        if ($handler instanceof Closure) {
-            $handler = new SerializableClosure($handler);
-        }
-        return $this->cache->doSet($cacheKey, $key, [serialize($handler), $skipListeners, $skipMiddlewares], $this->config->getConversationTtl());
+        return $this->cache->doSet($cacheKey, $key, [$handler, $skipListeners, $skipMiddlewares], $this->config->getConversationTtl());
     }
 
     public function getConversationHandler($chatId): PromiseInterface
@@ -61,10 +58,6 @@ class ConversationManager
                 }
 
                 $handler = $conversation['state'][0];
-                $handler = unserialize($handler);
-                if ($handler instanceof SerializableClosure) {
-                    $handler = $handler->getClosure();
-                }
                 return [$handler, $conversation['state'][1], $conversation['state'][2]];
             });
     }
