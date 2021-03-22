@@ -1683,7 +1683,7 @@ trait TelegramTrait
 
             } else {
                 $data = ['name' => $key];
-                $data['contents'] = strval($value);
+                $data['contents'] = is_array($value) ? json_encode($value) : (string)$value;
                 array_push($multipart_data, $data);
             }
         }
@@ -1713,8 +1713,10 @@ trait TelegramTrait
                     $this->container->get(ZanzaraLogger::class)->error("File not found: {$value->getPath()}");
                 }
 
+            } elseif (is_array($value)) {
+                $data['contents'] = json_encode($value);
             } else {
-                $data['contents'] = strval($value);
+                $data['contents'] = (string)$value;
             }
             array_push($multipart_data, $data);
         }
