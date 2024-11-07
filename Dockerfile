@@ -1,7 +1,7 @@
-FROM php:8.0-fpm
+FROM php:8.3-fpm
 
 COPY --from=composer:2.0.4 /usr/bin/composer /usr/bin/composer
-
+WORKDIR /opt/zanzara
 COPY . .
 
 RUN apt-get update && \
@@ -14,4 +14,4 @@ RUN docker-php-ext-install zip
 
 RUN composer install
 
-CMD php tests/zen-circus/php8/polling.php
+CMD php -S 0.0.0.0:8000

@@ -1,8 +1,18 @@
 version: '3.8'
 
 services:
-
-  bot:
-    build: .
-#    ports:
-#      - "8080:8080"
+  zanzara-service:
+    container_name: zanzara-bot
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    networks:
+      - zanzara-network
+    volumes:
+      - ./:/opt/zanzara/
+    ports:
+      - "8000:8000"
+networks:
+  zanzara-network:
+    driver: bridge
