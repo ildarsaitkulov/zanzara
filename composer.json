@@ -34,7 +34,6 @@
         "php-http/multipart-stream-builder": "^1.2",
         "netresearch/jsonmapper": "^4.1",
         "clue/http-proxy-react": "^1.8",
-        "opis/closure": "^3.6",
         "nyholm/psr7": "^1.8"
     },
     "require-dev": {

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Zanzara;
 
-use Closure;
-use Opis\Closure\SerializableClosure;
 use React\Promise\PromiseInterface;
 
 /**
@@ -50,10 +48,7 @@ class ConversationManager
 
     public function setConversationHandler($chatId, $handler, bool $skipListeners, bool $skipMiddlewares): PromiseInterface
     {
-        if ($handler instanceof Closure) {
-            $handler = new SerializableClosure($handler);
-        }
-        return $this->cache->set($this->resolveKey($chatId, self::HANDLER_KEY), [serialize($handler), $skipListeners, $skipMiddlewares], $this->config->getConversationTtl());
+        return $this->cache->set($this->resolveKey($chatId, self::HANDLER_KEY), [$handler, $skipListeners, $skipMiddlewares], $this->config->getConversationTtl());
     }
 
     public function getConversationHandler($chatId): PromiseInterface
@@ -65,10 +60,6 @@ class ConversationManager
                 }
 
                 $handler = $conversation[0];
-                $handler = unserialize($handler);
-                if ($handler instanceof SerializableClosure) {
-                    $handler = $handler->getClosure();
-                }
                 return [$handler, $conversation[1], $conversation[2]];
             });
     }
